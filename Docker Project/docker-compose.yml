@@ -1,0 +1,26 @@
+version: '3'
+services:
+    postgres:
+        image: 'postgres:latest'
+        environment:
+          - POSTGRES_PASSWORD=postgres_password
+          - POSTGRES_USER=postgres
+          - POSTGRES_DB=simple_blog_api     
+    api:
+      depends_on:
+        - postgres  
+      build:
+        dockerfile: Dockerfile.dev
+        context: .
+      ports:
+        - "3000:3000"
+      image: anishap/simple_blog_api_ts-master
+      volumes:
+        - /usr/app/node_modules
+        - .:/usr/app
+      environment:
+        - POSTGRES_HOST=postgres
+        - POSTGRES_DB=simple_blog_api
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres_password
+        - POSTGRES_PORT=5432
